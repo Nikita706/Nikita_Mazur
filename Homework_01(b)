@@ -1,0 +1,22 @@
+def palindrom_(n):
+    d=str(n)
+    if 1000<=n:
+        u = d[::-1]
+        if u==d:
+            m="palindrom"
+            return m
+        else:
+            m="not palindrom"
+            return m
+    elif 100<=n<1000:
+        q='0'+ d
+        u = q[::-1]
+        if q==u:
+            m="palindrom"
+            return m
+        else:
+            m="not palindrom"
+            return m
+    else :
+        m = "not palindrom "
+        return m
