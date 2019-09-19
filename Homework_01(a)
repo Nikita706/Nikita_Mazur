@@ -11,4 +11,3 @@ def side(day,hour):
         return ("left")
     elif (d%2!=0 and h>=21) or (d%2==0 and h<19):
         return ("right")
-print(side(2,21))
