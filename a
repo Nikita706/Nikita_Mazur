@@ -1,0 +1,13 @@
+def side(day,hour):
+    d=day
+    h=hour
+    if h>23 or h<0:
+        return ("wrong hour")
+    elif d>31 or d<0:
+        return ("wrong day")
+    elif 19<=h<21:
+        return ("both")
+    elif (d%2==0 and h>=21) or (d%2!=0 and h<19):
+        return ("left")
+    elif (d%2!=0 and h>=21) or (d%2==0 and h<19):
+        return ("right")
