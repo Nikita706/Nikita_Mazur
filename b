@@ -1,22 +1,23 @@
 def palindrom_(n):
-    d=str(n)
+    a=n//1000
+    b=n%10
+    c=(n//100)%10
+    d=(n%100)//10
+    e=0
     if 1000<=n<10000:
-        u = d[::-1]
-        if u==d:
-            m="palindrome"
+        if a==b and c==d:
+            m="palindrom"
             return m
         else:
-            m="is not palindrome"
+            m="not palindrom"
             return m
     elif 100<=n<1000:
-        q='0'+ d
-        u = q[::-1]
-        if q==u:
-            m="palindrome"
+        if e==b and c==d:
+            m="palindrom"
             return m
         else:
-            m="is not palindrome"
+            m="not palindrom"
             return m
     else :
-        m = "is not palindrome or wrong number"
+        m = "not palindrom or wrong number "
         return m
