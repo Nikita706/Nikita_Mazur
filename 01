@@ -1,0 +1,8 @@
+L=[2,'cat',7,2,9,'cat',7,42]
+def d():
+    M = []
+    for i in range(len(L)):
+        if M.count(L[i])!=1:
+            M.append(L[i])
+    return M
+print(d())
