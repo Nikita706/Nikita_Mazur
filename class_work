@@ -1,0 +1,92 @@
+class Room:
+    height=0
+    width=0
+    length=0
+    def __init__(self,width,length,height):
+        self.width=width
+        self.length=length
+        self.height=height
+        self.doors=[]
+        self.windows=[]
+        self.square=2*self.width*self.height+2*self.height*self.length
+    def add_doors(self,door):
+        self.doors.append(door)
+    def add_windows(self,window):
+        self.windows.append(window)
+    def test_door(self,door):
+        if door.height>room.height or door.width>room.width:
+            return(1)
+        else:
+            return(0)
+    def test_window(self,window):
+        if (window.height+window.delta)>room.height or window.width>room.width:
+            return(1)
+        else:
+            return(0)
+    def checkroom(self,squaredoors,squarewindows):
+        if self.square<=squaredoors+squarewindows:
+            print('Такой комнаты не существует')
+            return(0)
+        else:
+            print('Такая комната существует')
+            return(1)
+    def squareofwallpaper(self,squaredoors,squarehidedoors,squarewindows):
+        swallpaper=self.square-squaredoors+squarehidedoors-squarewindows
+        print('Площадь обоев: ',swallpaper)
+    def klight(self,squarewindows):
+        k=round(self.square/squarewindows,2)
+        print('Коэффициент освещенности: ',k)
+        return(k)
+class Frame:
+    def __init__(self,width,height):
+        self.height=height
+        self.width=width
+    def square(self):
+        return(self.height*self.width)
+class Door (Frame):
+    def __init__(self,height,width,hide):
+        Frame.__init__(self,height,width)
+        self.hide=hide
+        def square(self):
+            Frame.square(self)
+class Window(Frame):
+    def __init__(self,height,width,delta):
+        Frame.__init__(self,height,width)
+        self.delta=delta
+        def square(self):
+            Frame.square(self)
+wroom=int(input('Введите ширину комнаты'))
+lroom=int(input('Введите длину комнаты'))
+hroom=int(input('Введите высоту комнаты'))
+room=Room(wroom,lroom,hroom)
+squarewindows=0
+numberofwindows=int(input('Введите количество окон '))
+for i in range(numberofwindows):
+    h=int(input('Введите высоту окна '))
+    w=int(input('Введите ширину окна '))
+    d=int(input('Введите расстояние от пола окна '))
+    if room.test_window(Window(h,w,d))==0:
+        room.add_windows(Window(h,w,d))
+        squarewindows=(Window(h,w,d)).square()+squarewindows
+    else:
+        print('Окно не подходит ')
+numberofdoors=int(input('Введите количество дверей '))
+squaredoors=0
+squaredoors_wall=0
+for i in range(numberofdoors):
+    h=int(input('Введите высоту двери '))
+    w = int(input('Введите ширину двери '))
+    hd=input('Скрыта ли дверь? ')
+    if hd=='Да':
+       hide=1
+    else:
+        hide=0
+    if room.test_door(Door(h,w,hide))==0:
+        room.add_doors(Door(h,w,hide))
+        squaredoors=(Door(h,w,hide)).square()+squaredoors
+        squaredoors_wall=(Door(h,w,hide)).square()*hide+squaredoors_wall
+    else:
+        print('Дверь не подходит ')
+if room.checkroom(squaredoors,squarewindows)==1:
+    room.squareofwallpaper(squaredoors,squaredoors_wall,squarewindows)
+    room.klight(squarewindows)
