@@ -1,0 +1,48 @@
+import random
+class Warrior:
+    def __init__(self,name):
+        self.name=name
+        self.power = random.randint(20, 30)
+        self.health = random.randint(100, 150)
+    def returnPower(self):
+        return(self.power)
+    def returnHelth(self):
+        return (self.health)
+    def getDamage(self,damage):
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+class WarriorShield (Warrior):
+    def getDamage(self,damage):
+        shield=random.randint(5,10)
+        damage=damage-shield
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+class WarriorExpert(Warrior):
+    def __init__(self,name):
+        Warrior.__init__(self,name)
+    def returnPower(self):
+        r = random.randint(1, 5)
+        expertdamage = random.randint(20, 30)
+        if r == 1:
+            self.power=expertdamage*2
+            return (self.power)
+        else:
+            self.power=expertdamage
+            return (self.power)
+    def getDamage(self,damage):
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+
+firstWarrior=Warrior('Воин 1')
+secondWarrior=WarriorShield('Воин 2')
+thirdWarrior=WarriorExpert('Воин 3')
+print('Атака Воина 1:',firstWarrior.returnPower(),'Атака Воина 2:',secondWarrior.returnPower(),'Атака Воина 3:',thirdWarrior.returnPower())
