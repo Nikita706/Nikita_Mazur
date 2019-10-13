@@ -1,0 +1,80 @@
+import random
+class Warrior:
+    def __init__(self,name):
+        self.name=name
+        self.power = random.randint(20, 30)
+        self.health = random.randint(100, 150)
+    def returnPower(self):
+        return(self.power)
+    def returnHelth(self):
+        return (self.health)
+    def getDamage(self,damage):
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+class WarriorShield (Warrior):
+    def getDamage(self,damage):
+        shield=random.randint(5,10)
+        damage=damage-shield
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+class WarriorExpert(Warrior):
+    def __init__(self,name):
+        Warrior.__init__(self,name)
+    def returnPower(self):
+        r = random.randint(1, 5)
+        expertdamage = random.randint(20, 30)
+        if r == 1:
+            self.power=expertdamage*2
+            return (self.power)
+        else:
+            self.power=expertdamage
+            return (self.power)
+    def getDamage(self,damage):
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+Army_1=[]
+for i in range(4):
+    Army_1.append(Warrior('Воин из армии 1'))
+    Army_1.append(WarriorShield('Воин со щитом из армии 1'))
+    if i<2:
+        Army_1.append(WarriorExpert('Воин эксперт из армии 1'))
+Army_2=[]
+for i in range(4):
+    Army_2.append(Warrior('Воин из армии 2'))
+    Army_2.append(WarriorShield('Воин со щитом из армии 2'))
+    if i<2:
+        Army_2.append(WarriorExpert('Воин эксперт из армии 2'))
+i=0
+end=''
+while len(Army_1)!=0 or len(Army_2)!=0:
+    i=i+1
+    for a in Army_1:
+        if a.health<0:
+            Army_1.remove(a)
+            if len(Army_1)==0:
+                print('Армия 2 победила')
+                end='Конец'
+    for a in Army_2:
+        if a.health<0:
+            Army_2.remove(a)
+            if len(Army_2)==0:
+                print('Армия 1 победила')
+                end='Конец'
+    if end=='Конец':
+        break
+    else:
+        choice1=random.randint(0,len(Army_1)-1)
+        choice2=random.randint(0,len(Army_2)-1)
+        if i % 2 != 0:
+            Army_2[choice2].getDamage(Army_1[choice1].returnPower())
+        elif i%2==0:
+            Army_1[choice1].getDamage(Army_2[choice2].returnPower())
