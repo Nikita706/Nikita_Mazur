@@ -1,0 +1,84 @@
+import random
+class Warrior:
+    def __init__(self,name):
+        self.name=name
+        self.power = random.randint(20, 30)
+        self.health = random.randint(100, 150)
+    def returnPower(self):
+        return(self.power)
+    def returnHelth(self):
+        return (self.health)
+    def getDamage(self,damage):
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+class WarriorShield (Warrior):
+    def getDamage(self,damage):
+        shield=random.randint(5,10)
+        damage=damage-shield
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+class WarriorExpert(Warrior):
+    def __init__(self,name):
+        Warrior.__init__(self,name)
+    def returnPower(self):
+        r = random.randint(1, 5)
+        expertdamage = random.randint(20, 30)
+        if r == 1:
+            self.power=expertdamage*2
+            return (self.power)
+        else:
+            self.power=expertdamage
+            return (self.power)
+    def getDamage(self,damage):
+        self.health=self.health-damage
+        if self.health<=0:
+            print(self.name,'получил',damage,'урона и погиб')
+        else:
+            print(self.name,'получил',damage,'урона.', 'Осталось',self.health, 'здоровья' )
+
+firstWarrior_1=Warrior('Воин (1)')
+secondWarrior_1=WarriorShield('Воин cо щитом (1)')
+
+print('Бой Воина (1) и Воина со щитом (1):')
+while secondWarrior_1.health>0 and firstWarrior_1.health>0:
+    secondWarrior_1.getDamage(firstWarrior_1.returnPower())
+    if secondWarrior_1.health<=0:
+        break
+    firstWarrior_1.getDamage(secondWarrior_1.returnPower())
+if secondWarrior_1.health<=0:
+    print('Итог: победил', firstWarrior_1.name)
+elif firstWarrior_1.health<=0:
+    print('Итог: победил', secondWarrior_1.name)
+
+secondWarrior_2=WarriorShield('Воин со щитом (2)')
+thirdWarrior_1=WarriorExpert('Воин эксперт (1)')
+
+print('Бой Воина со щитом (2) и Воина эксперта (1):')
+while secondWarrior_2.health>0 and thirdWarrior_1.health>0:
+    secondWarrior_2.getDamage(thirdWarrior_1.returnPower())
+    if secondWarrior_2.health<=0:
+        break
+    thirdWarrior_1.getDamage(secondWarrior_2.returnPower())
+if secondWarrior_2.health<=0:
+    print('Итог: победил', thirdWarrior_1.name)
+elif thirdWarrior_1.health<=0:
+    print('Итог: победил', secondWarrior_2.name)
+
+print('Бой Воина (2) и Воина эксперта (2):')
+firstWarrior_2=WarriorShield('Воин (2)')
+thirdWarrior_2=WarriorExpert('Воин эксперт (2)')
+while firstWarrior_2.health>0 and thirdWarrior_2.health>0:
+    firstWarrior_2.getDamage(thirdWarrior_2.returnPower())
+    if firstWarrior_2.health<=0:
+        break
+    thirdWarrior_2.getDamage(firstWarrior_2.returnPower())
+if firstWarrior_2.health<=0:
+    print('Итог: победил', thirdWarrior_2.name)
+elif thirdWarrior_2.health<=0:
+    print('Итог: победил', firstWarrior_2.name)
