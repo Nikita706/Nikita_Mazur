@@ -1,0 +1,66 @@
+import sqlite3
+con=sqlite3.connect(":memory")
+cursor=con.cursor()
+cursor.execute("""CREATE TABLE IF NOT EXISTS people (name text, surname text, Idpeople integer PRIMARY KEY)""")
+cursor.execute("""CREATE TABLE IF NOT EXISTS trains (Idtrain integer PRIMARY KEY, direction text, date_time text)""")
+cursor.execute("""CREATE TABLE IF NOT EXISTS tickets (Idticket integer PRIMARY KEY, price integer)""")
+cursor.execute("""CREATE TABLE IF NOT EXISTS purchases (Idpeople integer, Idtrain integer, Idticket integer)""")
+
+data1=[("Anton","Orlov",1543),("Artem","Volk",1892),("Gleb","Korunov",1523),]
+data2=[(21,"West","23.01.20 13:40"),(14,"East","24.01.20 08:30"),(42,"East","29.01.20 21:10"),(51,"North","30.01.20 15:25"),(13,"West","30.01.20 19:10")]
+data3=[(111,2240),(112,1118)]
+data4=[(1543,21,111),(1543,13,111),(1892,42,112),(1543,14,111),(1892,21,112),(1892,14,112),(1892,51,111),(1523,14,112),(1892,13,111),(1523,51,112)]
+cursor.executemany("INSERT INTO people (name, surname, Idpeople) values(?,?,?)",data1)
+cursor.executemany("INSERT INTO trains (Idtrain, direction, date_time) values(?,?,?)",data2)
+cursor.executemany("INSERT INTO tickets (Idticket, price) values(?,?)",data3)
+cursor.executemany("INSERT INTO purchases (Idpeople,Idtrain,Idticket) values(?,?,?)",data4)
+
+cursor.execute("SELECT Idticket FROM purchases WHERE Idtrain=?",(14,))
+z=list(cursor.fetchall())
+print(z)
+p=0
+p2=0
+for i in z:
+    cursor.execute("SELECT price FROM tickets WHERE Idticket=?",(i))
+    y=list(cursor.fetchall())[0][0]
+    p=p+y
+print("Количество билетов на поезд 21:" ,len(z))
+print("Стоимость билетов, проданных на поезд 21:",p)
+
+cursor.execute("SELECT Idticket FROM purchases")
+totalt=list(cursor.fetchall())
+for i in totalt:
+    cursor.execute("SELECT price FROM tickets WHERE Idticket=?", (i))
+    y2 = list(cursor.fetchall())[0][0]
+    p2 = p2 + y2
+print("Общая стоимость проданных билетов:", p2)
+cursor.execute("SELECT Idpeople FROM purchases")
+totalidp=list(cursor.fetchall())
+allpeople=[]
+countpeople=[]
+for i in totalidp:
+    cursor.execute("SELECT name,surname FROM people WHERE Idpeople=?", (i))
+    y3=list(cursor.fetchall())[0]
+    allpeople.append(y3)
+for i in allpeople:
+    countpeople.append(allpeople.count(i))
+maximum=max(countpeople)
+mp=''
+sp=''
+for i in allpeople:
+    if allpeople.count(i)==maximum:
+        mp=i[0]
+        sp=i[1]
+print("Человек, который купил наибольшее количество билетов: ",mp,sp)
+totalidtickets=[]
+totalpricetickets=[]
+for i in totalidp:
+    cursor.execute("SELECT Idticket FROM purchases WHERE Idpeople=?", (i))
+    y6 = list(cursor.fetchall())[0]
+    totalidtickets.append(y6)
+    for k in y6:
+        cursor.execute("SELECT price From tickets WHERE Idticket=?",(y6))
+        y7=list(cursor.fetchall())[0][0]
+    totalpricetickets.append(y7)
+cursor.execute("UPDATE tickets SET price=2000 WHERE price=1118")
+cursor.execute("DELETE FROM purchases WHERE Idticket='112'")
