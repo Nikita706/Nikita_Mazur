@@ -1,0 +1,122 @@
+import sys
+import string
+from PySide2.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QGridLayout
+
+
+class Calculator(QWidget):
+    def __init__(self, parent=None):
+        super(Calculator, self).__init__(parent)
+        self.data=[]
+        self.setWindowTitle("Калькулятор")
+        self.resize(400, 400)
+        self.move(300, 300)
+        self.input2=QLabel('Ввод: ')
+        self.output2=QLabel('Результат: ')
+        self.input = QLabel('')
+        self.output = QLabel('')
+        self.b0 = QPushButton('0')
+        self.b1 = QPushButton('1')
+        self.b2 = QPushButton('2')
+        self.b3 = QPushButton('3')
+        self.b4 = QPushButton('4')
+        self.b5 = QPushButton('5')
+        self.b6 = QPushButton('6')
+        self.b7 = QPushButton('7')
+        self.b8 = QPushButton('8')
+        self.b9 = QPushButton('9')
+        self.plus = QPushButton('+')
+        self.sub = QPushButton('-')
+        self.mult = QPushButton('*')
+        self.div = QPushButton('/')
+        self.equally = QPushButton('=')
+        self.cl=QPushButton('C')
+
+        self.b1.clicked.connect(self.push)
+        self.b2.clicked.connect(self.push)
+        self.b3.clicked.connect(self.push)
+        self.b4.clicked.connect(self.push)
+        self.b5.clicked.connect(self.push)
+        self.b6.clicked.connect(self.push)
+        self.b7.clicked.connect(self.push)
+        self.b8.clicked.connect(self.push)
+        self.b9.clicked.connect(self.push)
+        self.b0.clicked.connect(self.push)
+        self.plus.clicked.connect(self.push)
+        self.sub.clicked.connect(self.push)
+        self.mult.clicked.connect(self.push)
+        self.div.clicked.connect(self.push)
+        self.equally.clicked.connect(self.result)
+        self.cl.clicked.connect(self.clear)
+
+        self.layout = QGridLayout()
+        self.layout.addWidget(self.input2, 1, 0)
+        self.layout.addWidget(self.input,1,1)
+        self.layout.addWidget(self.output2, 2, 0)
+        self.layout.addWidget(self.output,2,1)
+        self.layout.addWidget(self.plus,3,0)
+        self.layout.addWidget(self.sub,4,0)
+        self.layout.addWidget(self.mult,5,0)
+        self.layout.addWidget(self.div,6,0)
+        self.layout.addWidget(self.equally,7,0)
+        self.layout.addWidget(self.b1,3,1)
+        self.layout.addWidget(self.b2,3,2)
+        self.layout.addWidget(self.b3,3,3)
+        self.layout.addWidget(self.b4,4,1)
+        self.layout.addWidget(self.b5,4,2)
+        self.layout.addWidget(self.b6,4,3)
+        self.layout.addWidget(self.b7,5,1)
+        self.layout.addWidget(self.b8,5,2)
+        self.layout.addWidget(self.b9,5,3)
+        self.layout.addWidget(self.b0,6,1)
+        self.layout.addWidget(self.cl,7,1)
+        self.setLayout(self.layout)
+
+    def push(self):
+        click=self.sender()
+        self.data.append(click.text())
+        self.res=''.join(self.data)
+        self.input.setText('{}'.format(self.res))
+
+    def result(self):
+        plus=self.res.find("+")
+        sub=self.res.find("-")
+        mult=self.res.find('*')
+        div=self.res.find("/")
+        if plus!=-1:
+            arg1=int(self.res[:plus])
+            arg2=int(self.res[(plus+1):])
+            out=arg1+arg2
+            self.res=''
+            self.data=[]
+            self.output.setText('{}'.format(out))
+        elif sub!=-1:
+            arg1=int(self.res[:plus])
+            arg2=int(self.res[(plus+1):])
+            out=arg1-arg2
+            self.res=''
+            self.data=[]
+            self.output.setText('{}'.format(out))
+        elif mult!=-1:
+            arg1=int(self.res[:plus])
+            arg2=int(self.res[(plus+1):])
+            out=arg1*arg2
+            self.res=''
+            self.data=[]
+            self.output.setText('{}'.format(out))
+        elif div!=-1:
+            arg1=int(self.res[:plus])
+            arg2=int(self.res[(plus+1):])
+            out=arg1/arg2
+            self.res=''
+            self.data=[]
+            self.output.setText('{}'.format(out))
+    def clear(self):
+        self.data = []
+        self.res = ''
+        self.output.setText('{}'.format(''))
+        self.input.setText('{}'.format(''))
+if __name__ == '__main__':
+    app = QApplication()
+    form = Calculator()
+    form.show()
+    sys.exit(app.exec_())
