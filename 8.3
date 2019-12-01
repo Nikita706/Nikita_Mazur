@@ -1,0 +1,50 @@
+pol=["a",'b','c','d','e','f','g','h']
+while True:
+    out=input("Введите расположение фигур (белый король, белая ладья, черный король): ")
+    outlist=out.lower().split(' ')
+    check = []
+    for i in outlist:
+        try:
+           if 1<=int(i[1])<=8 and pol.index(i[0])!=-1:
+               check.append(i)
+        except:
+            pass
+    check_2 = set(check)
+    if len(check)==3 and len(check_2)==3 and 'er' not in check:
+        break
+    else:
+        print('входные параметры не валидны')
+wk=check[0]
+wk1=pol.index(wk[0])
+wk2=int(wk[1])
+wb=check[1]
+wb1=pol.index(wb[0])
+wb2=int(wb[1])
+bk=check[2]
+bk1=pol.index(bk[0])
+bk2=int(bk[1])
+while True:
+    if wk2==bk2 and (wk1==bk1+1 or bk1==wk1+1):
+        print('Strange')
+        break
+    elif wk1==bk1 and (wk2==bk2+1 or wk2==bk2-1):
+        print('Strange')
+        break
+    elif (wk1-bk1==1 or wk1-bk1==-1) and (wk2-bk2==1 or wk2-bk2==-1):
+        print('Strange')
+        break
+    elif wb2==bk2 and (bk1==0 or bk1==7) and (bk1==wk1 or ((wb1-bk1==-2 or wb1-bk1==2) and (wb2==1 or wb2==8))):
+        print('Checkmate')
+        break
+    elif wb1==wk1 and (bk2==1 or bk2==8) and (bk2==wk2 or ((wb2-bk2==-2 or wb2-bk2==2) and (wb1==0 or wb2==7))):
+        print('Checkmate')
+        break
+    elif (bk1==0 or bk1==7) and (bk2==1 or bk2==8) and (wk1==bk1 or wk2==bk2) and (wk1-bk1==2 or wk1-bk1==-2 or wk2-bk2==2 or wk2-bk2==-2) and (wb1-bk1==1 or wb1-bk1==-1 or wb2-bk2==1 or wb2-bk2==-1):
+        print('Stalemate')
+        break
+    else:
+        if bk1==wb1 or bk2==wb2:
+            print('Check')
+        else:
+            print('Normal')
+        break
