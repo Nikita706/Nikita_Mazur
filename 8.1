@@ -1,0 +1,22 @@
+def my_decorator(func_to_decorate):
+    def our_func(*args,**kwargs):
+        try:
+            return(func_to_decorate(*args,*kwargs))
+        except ZeroDivisionError as z:
+            print("Деление на 0")
+        except TypeError as t:
+            print('Ошибка в количестве аргументов/происходят операции между значениями, которые принадлежат к разным типам')
+        except ValueError as v:
+            print('Ошибка в значении аргументов')
+        except NameError as n:
+            print('Используемая переменная не определена')
+        except IndexError as i:
+            print('Индекс за пределами последовательности')
+        except Exception as e:
+            print('Ошибка')
+    return our_func
+@my_decorator
+def a(x,y):
+    m=x/y
+    print(m)
+a(5,0)
