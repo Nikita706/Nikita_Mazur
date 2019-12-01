@@ -1,0 +1,16 @@
+import sqlite3
+con=sqlite3.connect(":memory")
+cursor=con.cursor()
+cursor.execute("""CREATE TABLE IF NOT EXISTS trains (Idtrain integer PRIMARY KEY, direction text, date_time text)""")
+data2=[(21,"West","23.01.20 13:40"),(14,"East","24.01.20 08:30"),(42,"East","29.01.20 21:10"),(51,"North","30.01.20 15:25"),(13,"West","30.01.20 19:10")]
+def commit_after_execute(func_to_decorate):
+    def change_func(*args,**kwargs):
+        func_to_decorate(*args,**kwargs)
+        con.commit()
+    return (change_func)
+@commit_after_execute
+def ch(x):
+    cursor.executemany("INSERT INTO trains (Idtrain, direction, date_time) values(?,?,?)", x)
+ch(data2)
+cursor.execute("SELECT Idtrain FROM trains")
+print(list(cursor.fetchall()))
