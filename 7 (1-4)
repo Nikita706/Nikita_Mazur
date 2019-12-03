@@ -1,0 +1,100 @@
+import click
+import requests
+
+headers = {'Authorization': 'Токен'}
+
+@click.group()
+def cli():
+    pass
+
+@cli.command()
+def disk_info():
+    try:
+        r = requests.get('https://cloud-api.yandex.net:443/v1/disk', headers= headers)
+        if r.status_code == 200:
+            r = r.json()
+            click.echo('Общий объем диска: '+str(r['total_space']))
+            click.echo('Используемый объем диска: '+str(r['used_space']))
+        else:
+            click.echo('Ошибка '+str(r.status_code))
+    except requests.exceptions.Timeout:
+        click.echo('Timeout')
+    except requests.exceptions.ConnectionError:
+        click.echo('ConnectionError')
+    except requests.exceptions.HTTPError:
+        click.echo('HTTPError')
+
+@cli.command()
+@click.argument('path')
+def disk_resources_info(path):
+    try:
+        r = requests.get('https://cloud-api.yandex.net:443/v1/disk/resources/?path='+path, headers=headers)
+        if r.status_code == 200:
+            r = r.json()
+            n = 0
+            click.echo('Директория: '+str(r['path']))
+            for i in r['_embedded']['items']:
+                n += 1
+                if i['type'] == 'dir':
+                    click.echo(str(n)+'.'+' Папка: '+str(i['name']))
+                    r1 = requests.get('https://cloud-api.yandex.net:443/v1/disk/resources?path='+path+'/'+ i['name'],
+                                  headers=headers)
+                    r1 = r1.json()
+                    for files in r1['_embedded']['items']:
+                        click.echo('Файл: '+str(files['name']))
+                        click.echo('Размер файла (мгб.): '+str(int(files['size']) / (1024 ** 2)))
+                        click.echo('mime_type: '+str(files['mime_type']))
+                        click.echo('Дата загрузки: '+str(files['created']))
+                elif i['type'] == 'file':
+                    click.echo(str(n)+'.'+ ' Файл: ' + str(i['name']))
+                    click.echo('Размер файла (мгб.): ' + str(int(i['size']) / (1024 ** 2)))
+                    click.echo('mime_type: ' + str(i['mime_type']))
+                    click.echo('Дата загрузки: ' + str(i['created']))
+        else:
+            click.echo('Ошибка ' + str(r.status_code))
+    except requests.exceptions.Timeout:
+        click.echo('Timeout')
+    except requests.exceptions.ConnectionError:
+        click.echo('ConnectionError')
+    except requests.exceptions.HTTPError:
+        click.echo('HTTPError')
+
+@cli.command()
+@click.argument('path')
+def download_file(path):
+    try:
+        r = requests.get('https://cloud-api.yandex.net:443/v1/disk/resources/?path=' + path, headers=headers)
+        if r.status_code ==200:
+            r = r.json()
+            dn = open('/Users/nikitamazur/Desktop'+r['name'], "wb")
+            dn.write(requests.get(r['file']).content)
+            dn.close()
+            click.echo('Файл успешно загружен')
+        else:
+            click.echo('Ошибка ' + str(r.status_code))
+    except requests.exceptions.Timeout:
+        click.echo('Timeout')
+    except requests.exceptions.ConnectionError:
+        click.echo('ConnectionError')
+    except requests.exceptions.HTTPError:
+        click.echo('HTTPError')
+
+@cli.command()
+@click.argument('path')
+def create_folder(path):
+    try:
+        r = requests.put('https://cloud-api.yandex.net/v1/disk/resources/?path=' + path,headers=headers)
+        if r.status_code == 201:
+            click.echo('Папка успешно создана')
+        else:
+            click.echo('Ошибка ' + str(r.status_code))
+    except requests.exceptions.Timeout:
+        click.echo('Timeout')
+    except requests.exceptions.ConnectionError:
+        click.echo('ConnectionError')
+    except requests.exceptions.HTTPError:
+        click.echo('HTTPError')
+
+
+if __name__ == '__main__':
+    cli()
