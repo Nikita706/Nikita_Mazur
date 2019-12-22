@@ -1,0 +1,50 @@
+#1
+def fs(x):
+    if len(str(x))>1:
+        n=0
+        while x>0:
+            n=n+x%10
+            x=x//10
+        if len(str(n))>=1:
+            fs(n)
+    else:
+        print(x)
+fs(123456)
+
+#2
+def fa(m,n):
+    if m==0:
+        return (n+1)
+    if m>0 and n==0:
+        return (fa(m-1,1))
+    if m>0 and n>0:
+        return (fa(m-1,fa(m,n-1)))
+
+
+#3
+def reverse_n(x,l=[]):
+    if x>0:
+       l.append(str(x%10))
+       return(reverse_n(x//10))
+    else:
+        res=''.join(l)
+        print(res)
+reverse_n(58973240)
+#4
+def transform(x,l=[]):
+    if x>0:
+        l.insert(0,str(x%2))
+        return(transform(x//2))
+    else:
+        res=''.join(l)
+        print(res)
+transform(893784)
+#5
+def prime_m (m, i=2):
+    if m==i:
+        print(i)
+    elif m%i==0:
+        print(i)
+        return(prime_m(m/i,i))
+    else:
+        return(prime_m(m,i+1))
